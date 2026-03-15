@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L2G ADS</title>
+    <link rel="stylesheet" href="css/popup.css">
+</head>
+
+<body>
+    <!-- License Activation Screen -->
+    <div class="container" id="licenseContainer" style="display: none;">
+        <div class="header">
+            <div class="logo-title">
+                <img src="img/logo.png" alt="L2G ADS Logo" class="logo">
+                <h1>L2G ADS</h1>
+            </div>
+        </div>
+
+        <div class="license-card">
+            <h2>Activate License</h2>
+            <p class="license-description">Enter your license key to activate the extension</p>
+
+            <div class="setting-group">
+                <label for="licenseKeyInput">License Key</label>
+                <input type="text" id="licenseKeyInput" placeholder="Enter your license key" class="input-field">
+            </div>
+
+            <button class="control-btn start-btn" id="activateBtn">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5"/>
+                    <path d="M2 12l10 5 10-5"/>
+                </svg>
+                Activate License
+            </button>
+
+            <p class="license-link">
+                Don't have a license key?
+                <a href="#" id="registerLink">Get one now</a>
+            </p>
+
+            <div id="licenseStatus" class="status-message"></div>
+        </div>
+    </div>
+
+    <!-- Main Application Screen -->
+    <div class="container" id="popupContainer" style="display: none;">
+        <div class="header">
+            <div class="logo-title">
+                <img src="img/logo.png" alt="L2G ADS Logo" class="logo">
+                <h1>L2G ADS</h1>
+            </div>
+            <button class="dashboard-btn" id="dashboardBtn">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                    <line x1="9" y1="9" x2="15" y2="9" />
+                    <line x1="9" y1="15" x2="15" y2="15" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="license-info">
+            <span id="licenseStatusText">License: Active ✓</span>
+            <span id="licenseExpiryText" class="license-expiry"></span>
+        </div>
+
+        <div class="status-info">
+            <span id="statusText">Ready</span>
+        </div>
+
+        <div class="settings-card">
+            <div class="setting-group">
+                <label for="delayInput">Delay (ms)</label>
+                <input type="number" id="delayInput" min="1000" step="500" value="2000" class="input-field">
+            </div>
+
+            <div class="setting-group">
+                <label for="maxCountInput">Max Ads</label>
+                <input type="number" id="maxCountInput" min="1" value="100" class="input-field">
+            </div>
+
+            <div class="setting-group">
+                <label class="checkbox-container">
+                    <input type="checkbox" id="selectAllCheckbox">
+                    <span class="checkmark"></span>
+                    Select All Ads
+                </label>
+            </div>
+
+            <div class="setting-group">
+                <label>Mode</label>
+                <div class="toggle-wrapper">
+                    <span id="currentMode" class="current-mode local-mode">Local</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="modeToggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-panel">
+            <button class="control-btn start-btn" id="startBtn">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <polygon points="5,3 19,12 5,21" />
+                </svg>
+                Start
+            </button>
+
+            <button class="control-btn pause-btn" id="pauseBtn" disabled>
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <rect x="6" y="4" width="4" height="16" />
+                    <rect x="14" y="4" width="4" height="16" />
+                </svg>
+                Pause
+            </button>
+
+            <button class="control-btn resume-btn" id="resumeBtn" disabled>
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <polygon points="5,3 19,12 5,21" />
+                </svg>
+                Resume
+            </button>
+
+            <button class="control-btn stop-btn" id="stopBtn" disabled>
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <rect x="3" y="3" width="18" height="18" />
+                </svg>
+                Stop
+            </button>
+        </div>
+
+        <div class="license-actions">
+            <button class="text-btn" id="deactivateLicenseBtn">Deactivate License</button>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>

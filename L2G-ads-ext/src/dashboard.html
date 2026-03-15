@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L2G ADS Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <header>
+            <div class="header-content">
+                <h1><i class="fas fa-chart-line"></i> L2G ADS Dashboard</h1>
+                <div class="header-actions">
+                    <button id="ai-analyze-btn" class="btn btn-ai"><i class="fas fa-brain"></i> AI Analysis</button>
+                    <button id="export-excel" class="btn btn-primary"><i class="fas fa-file-excel"></i> Export Excel</button>
+                    <button id="clear-data" class="btn btn-danger"><i class="fas fa-trash"></i> Clear Data</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- AI Analysis Modal -->
+        <div id="ai-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-robot"></i> AI-Powered Analysis</h2>
+                    <button class="close-modal" id="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="analysis-options">
+                        <button class="analysis-btn" data-type="market">
+                            <i class="fas fa-globe"></i>
+                            <span>Market Overview</span>
+                            <small>Comprehensive market analysis and trends</small>
+                        </button>
+                        <button class="analysis-btn" data-type="competitor">
+                            <i class="fas fa-users"></i>
+                            <span>Competitor Analysis</span>
+                            <small>Deep dive into specific competitors</small>
+                        </button>
+                        <button class="analysis-btn" data-type="campaign">
+                            <i class="fas fa-bullhorn"></i>
+                            <span>Campaign Optimizer</span>
+                            <small>Get recommendations for your campaigns</small>
+                        </button>
+                        <button class="analysis-btn" data-type="trends">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Trend Prediction</span>
+                            <small>Forecast future market movements</small>
+                        </button>
+                        <button class="analysis-btn" data-type="roi">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>ROI Estimator</span>
+                            <small>Calculate potential returns</small>
+                        </button>
+                        <button class="analysis-btn" data-type="custom">
+                            <i class="fas fa-comments"></i>
+                            <span>Ask AI Anything</span>
+                            <small>Custom questions about your data</small>
+                        </button>
+                    </div>
+
+                    <!-- Competitor Selection (hidden by default) -->
+                    <div id="competitor-select-container" style="display: none;">
+                        <label for="competitor-select">Select Competitor:</label>
+                        <select id="competitor-select" class="input-field"></select>
+                    </div>
+
+                    <!-- Custom Question Input (hidden by default) -->
+                    <div id="custom-question-container" style="display: none;">
+                        <label for="custom-question">Ask your question:</label>
+                        <textarea id="custom-question" class="input-field" rows="4" placeholder="e.g., What are the best domains to advertise on for e-commerce?"></textarea>
+                    </div>
+
+                    <!-- Campaign Input (hidden by default) -->
+                    <div id="campaign-input-container" style="display: none;">
+                        <h3>Your Campaign Details</h3>
+                        <div class="form-group">
+                            <label>Target Domain (optional):</label>
+                            <input type="text" id="campaign-domain" class="input-field" placeholder="e.g., example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Campaign Duration (days):</label>
+                            <input type="number" id="campaign-duration" class="input-field" value="30" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label>Budget Range:</label>
+                            <select id="campaign-budget" class="input-field">
+                                <option value="micro">Micro ($100 - $500)</option>
+                                <option value="small">Small ($500 - $1,000)</option>
+                                <option value="low">Low ($1,000 - $5,000)</option>
+                                <option value="medium" selected>Medium ($5,000 - $20,000)</option>
+                                <option value="high">High ($20,000 - $50,000)</option>
+                                <option value="enterprise">Enterprise ($50,000+)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="analysis-actions">
+                        <button id="run-analysis-btn" class="btn btn-primary" style="display: none;">
+                            <i class="fas fa-play"></i> Run Analysis
+                        </button>
+                    </div>
+
+                    <!-- Analysis Results -->
+                    <div id="analysis-results" style="display: none;">
+                        <div class="analysis-header">
+                            <h3 id="analysis-title"></h3>
+                            <button id="export-analysis-btn" class="btn btn-secondary">
+                                <i class="fas fa-download"></i> Export Report
+                            </button>
+                        </div>
+                        <div id="analysis-content" class="analysis-content"></div>
+                        <div id="analysis-recommendations" class="recommendations-section"></div>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div id="analysis-loading" style="display: none;">
+                        <div class="loading-spinner"></div>
+                        <p>AI is analyzing your data... This may take 10-30 seconds.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-ad"></i></div>
+                <div class="stat-content">
+                    <h3>Total Ads</h3>
+                    <p id="total-ads">0</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+                <div class="stat-content">
+                    <h3>Date Range</h3>
+                    <p id="date-range">-</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-building"></i></div>
+                <div class="stat-content">
+                    <h3>Advertisers</h3>
+                    <p id="total-advertisers">0</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-globe"></i></div>
+                <div class="stat-content">
+                    <h3>Domains</h3>
+                    <p id="total-domains">0</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Search by advertiser, domain, spending, time shown...">
+                <button id="search-button"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="filter-options">
+                <div class="filter-group">
+                    <label for="domain-filter">Domain:</label>
+                    <select id="domain-filter">
+                        <option value="">All Domains</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="advertiser-filter">Advertiser:</label>
+                    <select id="advertiser-filter">
+                        <option value="">All Advertisers</option>
+                    </select>
+                </div>
+                <div class="filter-group date-range-filter">
+                    <label>Date Range:</label>
+                    <div class="date-inputs">
+                        <input type="date" id="start-date-filter" placeholder="Start Date">
+                        <span>to</span>
+                        <input type="date" id="end-date-filter" placeholder="End Date">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-table-container">
+            <table id="ads-data-table">
+                <thead>
+                    <tr>
+                        <th>Advertiser ID</th>
+                        <th>Advertiser Name</th>
+                        <th>URL Detail</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Total Display Days</th>
+                        <th>Spend Range</th>
+                        <th>Time Shown</th>
+                        <th>Domain</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- Data will be populated here -->
+                </tbody>
+            </table>
+            <div id="no-data-message" class="hidden">
+                <p>No data available. Start scraping from the Google Ads Transparency Center.</p>
+                <button id="go-to-google-ads" class="btn btn-primary">Go to Google Ads Transparency</button>
+            </div>
+            <div class="pagination">
+                <button id="prev-page" disabled><i class="fas fa-chevron-left"></i> Previous</button>
+                <span id="page-info">Page 1 of 1</span>
+                <button id="next-page" disabled>Next <i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+
+        <div class="data-visualization">
+            <div class="chart-container">
+                <h2>Ads Timeline</h2>
+                <canvas id="timeline-chart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h2>Top Domains</h2>
+                <canvas id="domains-chart"></canvas>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2025 L2G ADS | Data is stored locally in your browser</p>
+        </footer>
+    </div>
+
+    <script src="js/chart.js"></script>
+    <script src="js/xlsx.full.min.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+
+</html>
