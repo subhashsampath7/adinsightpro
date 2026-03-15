@@ -1,0 +1,55 @@
+{
+    "manifest_version": 3,
+    "name": "L2G Ads",
+    "version": "1.2.2",
+    "description": "This tool for extracting data from Google Ad Transparency Center",
+    "permissions": [
+        "storage",
+        "tabs",
+        "activeTab",
+        "scripting",
+        "webRequest",
+        "webRequestAuthProvider"
+    ],
+    "host_permissions": [
+        "<all_urls>"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "img/icon.png",
+            "48": "img/icon.png",
+            "128": "img/icon.png"
+        }
+    },
+    "content_scripts": [{
+        "matches": [
+            "https://adstransparency.google.com/*"
+        ],
+        "js": [
+            "content.js"
+        ]
+    }],
+    "icons": {
+        "16": "img/icon.png",
+        "48": "img/icon.png",
+        "128": "img/icon.png"
+    },
+    "web_accessible_resources": [{
+        "resources": [
+            "dashboard.html",
+            "img/*",
+            "*.js",
+            "*.css"
+        ],
+        "matches": [
+            "<all_urls>"
+        ]
+    }],
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'self'"
+    }
+}
